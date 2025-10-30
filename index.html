@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minha Bucket List</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🌟 Minha Bucket List 🌟</h1>
+
+    <!-- Autenticação -->
+    <div id="auth">
+      <div id="user-info" style="display:none">
+        <span id="welcome"></span>
+        <button id="btn-logout" type="button">Sair</button>
+      </div>
+
+      <div id="forms">
+        <div id="login-section">
+          <h2>Entrar</h2>
+          <input id="login-email" placeholder="Email" />
+          <input id="login-password" placeholder="Senha" type="password" />
+          <button id="btn-login" type="button">Entrar</button>
+          <div style="margin-top:8px;">
+            <button id="show-register" class="register-toggle" type="button">Não tem conta? Registrar</button>
+          </div>
+        </div>
+
+        <div id="register-section" style="display:none; margin-top:12px;">
+          <h3>Registrar</h3>
+          <input id="reg-nome" placeholder="Nome" />
+          <input id="reg-email" placeholder="Email" />
+          <input id="reg-password" placeholder="Senha" type="password" />
+          <button id="btn-register" type="button">Registrar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulário para adicionar metas -->
+    <div id="novo-form" style="display:none">
+      <h2>Adicionar Meta</h2>
+      <input id="meta-titulo" placeholder="Título" />
+      <textarea id="meta-descricao" placeholder="Descrição"></textarea>
+
+      <div style="display:flex;gap:8px;align-items:center;margin:8px 0;">
+        <div style="flex:1">
+          <label style="font-size:13px;display:block;margin-bottom:6px">Ícone</label>
+          <input id="meta-icon" placeholder="Emoji (ex: ⭐)" />
+          <div class="emoji-list" style="margin-top:6px">
+            <button type="button" class="emoji">⭐</button>
+            <button type="button" class="emoji">🎯</button>
+            <button type="button" class="emoji">✈️</button>
+            <button type="button" class="emoji">🎸</button>
+            <button type="button" class="emoji">📷</button>
+            <button type="button" class="emoji">🏔️</button>
+          </div>
+        </div>
+        <div style="width:140px">
+          <label style="font-size:13px;display:block;margin-bottom:6px">Cor</label>
+          <div class="color-palette" style="display:flex;gap:6px">
+            <button type="button" class="color-swatch" data-color="#ffffff" style="background:#ffffff"></button>
+            <button type="button" class="color-swatch" data-color="#fff0f6" style="background:#fff0f6"></button>
+            <button type="button" class="color-swatch" data-color="#e6fcf5" style="background:#e6fcf5"></button>
+            <button type="button" class="color-swatch" data-color="#fff7e6" style="background:#fff7e6"></button>
+            <button type="button" class="color-swatch" data-color="#e8e9ff" style="background:#e8e9ff"></button>
+            <button type="button" class="color-swatch" data-color="#fde2e2" style="background:#fde2e2"></button>
+          </div>
+        </div>
+      </div>
+
+      <button id="btn-add-meta" type="button">Adicionar</button>
+    </div>
+
+    <!-- Lista de metas -->
+    <div id="lista"></div>
+
+    <!-- Modal de edição (inspirado no Notion: simples, limpo) -->
+    <div id="edit-modal" class="modal" style="display:none;">
+      <div class="modal-overlay"></div>
+      <div class="modal-content">
+        <header class="modal-header">
+          <h3>Editar Meta</h3>
+          <button id="edit-cancel" type="button" class="modal-close">✖</button>
+        </header>
+        <div class="modal-body">
+          <label>Título</label>
+          <input id="edit-title" placeholder="Título da meta" />
+
+          <label>Descrição</label>
+          <textarea id="edit-desc" placeholder="Descrição"></textarea>
+
+          <div class="row">
+            <div>
+              <label>Ícone</label>
+              <input id="edit-icon" placeholder="Emoji ou texto curto" />
+              <div id="emoji-list" class="emoji-list">
+                <button type="button" class="emoji">⭐</button>
+                <button type="button" class="emoji">🎯</button>
+                <button type="button" class="emoji">✈️</button>
+                <button type="button" class="emoji">🎸</button>
+                <button type="button" class="emoji">📷</button>
+                <button type="button" class="emoji">🏔️</button>
+              </div>
+            </div>
+
+            <div>
+              <label>Cor</label>
+              <div id="color-palette" class="color-palette">
+                <button type="button" class="color-swatch" data-color="#ffffff" style="background:#ffffff"></button>
+                <button type="button" class="color-swatch" data-color="#fff0f6" style="background:#fff0f6"></button>
+                <button type="button" class="color-swatch" data-color="#e6fcf5" style="background:#e6fcf5"></button>
+                <button type="button" class="color-swatch" data-color="#fff7e6" style="background:#fff7e6"></button>
+                <button type="button" class="color-swatch" data-color="#e8e9ff" style="background:#e8e9ff"></button>
+                <button type="button" class="color-swatch" data-color="#fde2e2" style="background:#fde2e2"></button>
+              </div>
+            </div>
+          </div>
+
+          <label>Data de conclusão (opcional)</label>
+          <input id="edit-date" type="date" />
+
+          <label>Adicionar foto</label>
+          <input id="edit-photo" type="file" accept="image/*" />
+        </div>
+        <footer class="modal-footer">
+          <button id="edit-save" type="button">Salvar</button>
+          <button id="edit-cancel-2" type="button" class="modal-cancel">Cancelar</button>
+        </footer>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts: modelos e serviços -->
+  <script src="models/Meta.js"></script>
+  <script src="models/User.js"></script>
+  <script src="services/AuthService.js"></script>
+  <script src="services/GoalService.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
+
